@@ -116,6 +116,7 @@ func TestCalcEarnings(t *testing.T) {
 		exp float64
 	}{
 		{o1, 38, 7500, 20900},
+		{o1, 1, 1, 1500},
 		{o2, 24, 12345, 26028},
 	}
 
