@@ -88,3 +88,45 @@ func TestNewOfferFromString(t *testing.T) {
 		})
 	}
 }
+
+func TestCalcEarnings(t *testing.T) {
+	t.Parallel()
+
+	o1 := &compareoffers.Offer{
+		Advance: 1500,
+		Escalator: []compareoffers.Step{
+			{7, 5000},
+			{8, 0},
+		},
+	}
+
+	o2 := &compareoffers.Offer{
+		Advance: 2500,
+		Escalator: []compareoffers.Step{
+			{8, 5000},
+			{9, 5000},
+			{10, 0},
+		},
+	}
+
+	tests := []struct {
+		o   *compareoffers.Offer
+		p   float64
+		c   int
+		exp float64
+	}{
+		{o1, 38, 7500, 20900},
+		{o2, 24, 12345, 26028},
+	}
+
+	for _, tc := range tests {
+		tc := tc
+		t.Run("", func(t *testing.T) {
+			t.Parallel()
+			res := tc.o.CalcEarnings(tc.p, tc.c)
+			if res != tc.exp {
+				t.Errorf("received %.2f, but expected %.2f", res, tc.exp)
+			}
+		})
+	}
+}
